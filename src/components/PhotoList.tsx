@@ -13,6 +13,7 @@ const StyledList = styled.li`
   img {
     display: block;
     width: 100%;
+    min-height: 300px;
     box-shadow: 0 4px 10px 4px rgba(0, 0, 0, 0.2);
     cursor: pointer;
   }
@@ -25,7 +26,7 @@ const StyledList = styled.li`
 const PhotoList = forwardRef<HTMLLIElement, PhotoListProps>(({ photoData }, ref) => {
   return (
     <StyledList ref={ref}>
-      <img src={photoData.urls.regular} alt={photoData.alt_description} />
+      <img src={photoData.urls.regular} alt={photoData.alt_description} onClick={() => console.log(photoData)} />
       <h3>{photoData.alt_description ? photoData.alt_description : '설명없음'}</h3>
     </StyledList>
   );
