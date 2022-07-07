@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.js": "/search_photo2/static/js/main.9dd39b4a.js",
+    "main.js": "/search_photo2/static/js/main.cd2d5043.js",
     "index.html": "/search_photo2/index.html",
-    "main.9dd39b4a.js.map": "/search_photo2/static/js/main.9dd39b4a.js.map"
+    "main.cd2d5043.js.map": "/search_photo2/static/js/main.cd2d5043.js.map"
   },
   "entrypoints": [
-    "static/js/main.9dd39b4a.js"
+    "static/js/main.cd2d5043.js"
   ]
 }
