@@ -3,32 +3,37 @@ import styled from 'styled-components';
 const StyledForm = styled.form`
   display: flex;
   justify-content: space-between;
-  gap: 20px;
   margin-bottom: 20px;
+  padding: 10px 20px;
+  height: 50px;
+  width: 100%;
+  gap: 20px;
+  background-color: lightgreen;
+  border: none;
+  border-radius: 20px;
 
   & > input[type='text'] {
-    padding: 10px;
-    background-color: lightgreen;
+    padding: 0px;
     border: none;
-    border-radius: 20px;
-    width: 330px;
+    background-color: transparent;
+    width: 80%;
+    font-size: 16px;
+    border-bottom: 1px solid white;
 
     &:focus {
       outline: none;
-      box-shadow: 0 0 4px 2px rgba(0, 0, 0, 0.1);
     }
   }
 
   & > input[type='submit'] {
     background-color: lightgreen;
     border: none;
-    border-radius: 20px;
     color: white;
-    padding: 10px;
+    margin: 0;
+    padding: 0;
     cursor: pointer;
 
     &:hover {
-      box-shadow: 0 0 4px 2px rgba(0, 0, 0, 0.1);
     }
   }
 `;

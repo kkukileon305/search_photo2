@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { getUnsplashSnapshot, PhotoData } from './API';
-import EndSearch from './components/EndSearch';
+import FavoriteAside from './components/FavoriteList';
 import PhotoList from './components/PhotoList';
 import SkeletonList from './components/SkeletonList';
 import StyledContainer from './styles/StyledContainer';
@@ -8,11 +8,14 @@ import StyledForm from './styles/StyledForm';
 
 const App = () => {
   const [photoList, setPhotoList] = useState<PhotoData[]>([]);
+  const [favoriteList, setFavoriteList] = useState<PhotoData[]>([]);
   const [page, setPage] = useState(1);
   const [item, setItem] = useState<string>('');
   const [scrollItem, setScrollItem] = useState('');
   const [loading, setLoading] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const lastListRef = useRef(null);
+  const [validation, setValidation] = useState('Write your keyword...');
 
   const observer = new IntersectionObserver(
     (entries) => {
@@ -37,7 +40,14 @@ const App = () => {
 
   const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setScrollItem((e.target as HTMLFormElement).item.value);
+
+    if (!item) {
+      setValidation('빈칸은 입력할 수 없습니다');
+      return;
+    }
+
+    setValidation('Write your keyword...');
+    setScrollItem(item);
     setPage(1);
     setLoading(true);
     try {
@@ -72,30 +82,52 @@ const App = () => {
     updatePhotoList();
   }, [page]);
 
+  useEffect(() => {
+    const scrollHandler = () => {
+      const { scrollY } = window;
+      scrollY > 30 && setScrolled(true);
+      scrollY <= 30 && setScrolled(false);
+    };
+
+    window.addEventListener('scroll', scrollHandler);
+
+    return () => {
+      window.removeEventListener('scroll', scrollHandler);
+    };
+  }, []);
+
   return (
-    <StyledContainer>
-      <h2>사진 검색하기</h2>
-      <StyledForm onSubmit={submitHandler}>
-        <input type='text' onChange={(e) => setItem((e.target as HTMLInputElement).value)} name='item' />
-        <input type='submit' value='Search' />
-      </StyledForm>
-      <ul>
-        {photoList.map((e, i) => (
-          <PhotoList key={i} photoData={e} ref={i === photoList.length - 1 ? lastListRef : undefined} />
-        ))}
-        {loading && (
-          <>
-            <SkeletonList />
-            <SkeletonList />
-            <SkeletonList />
-            <SkeletonList />
-            <SkeletonList />
-            <SkeletonList />
-          </>
-        )}
-      </ul>
-      {page === 5 && <EndSearch />}
-    </StyledContainer>
+    <>
+      <StyledContainer>
+        <h2>사진 검색하기</h2>
+        <StyledForm onSubmit={submitHandler}>
+          <input type='text' onChange={(e) => setItem((e.target as HTMLInputElement).value)} name='item' placeholder={validation} />
+          <input type='submit' value='Search' />
+        </StyledForm>
+        <ul>
+          {photoList.map((e, i) => (
+            <PhotoList
+              key={i} //
+              photoData={e}
+              ref={i === photoList.length - 1 ? lastListRef : undefined}
+              setFavoriteList={setFavoriteList}
+              favoriteList={favoriteList}
+            />
+          ))}
+          {loading && (
+            <>
+              <SkeletonList />
+              <SkeletonList />
+              <SkeletonList />
+              <SkeletonList />
+              <SkeletonList />
+              <SkeletonList />
+            </>
+          )}
+        </ul>
+      </StyledContainer>
+      <FavoriteAside scrolled={scrolled} />
+    </>
   );
 };
 
